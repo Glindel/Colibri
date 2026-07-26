@@ -1,5 +1,6 @@
 use std::time::SystemTime;
 use std::fmt::Display;
+use serde::{Serialize, Deserialize};
 
 pub struct User {
     id: u64,
@@ -7,8 +8,8 @@ pub struct User {
 }
 
 impl User {
-    pub fn new(id: u64, username: String) -> User {
-        User { id, username }
+    pub fn new(id: u64, username: &str) -> User {
+        User { id, username: String::from(username) }
     }
 
     pub fn id(&self) -> u64 {
@@ -59,6 +60,7 @@ impl Channel {
     }
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct Message {
     author_id: u64,
     content: String,
