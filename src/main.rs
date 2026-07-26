@@ -1,3 +1,5 @@
+use crate::{models::User, network::{run_client, run_server}};
+
 pub mod models;
 pub mod network;
 
@@ -5,11 +7,15 @@ pub mod network;
 async fn main() -> anyhow::Result<()> {
     let args: Vec<String> = std::env::args().collect();
 
-    match args.get(1).map(|s| s.as_str()) {
-        Some("server") => network::run_server("127.0.0.1:8080").await?,
-        Some("client") => network::run_client("127.0.0.1:8080").await?,
-        _ => println!("Usage: cargo run -- [server|client]"),
-    }
+    
+    let user = User::new(0, &args[1].as_str());
+    let my_port = &args[2];
+    let peer_port = &args[3];
+
+    let addr = format!("127.0.0.1:{my_port}");
+    let peer_addr = format!("127.0.0.1:{peer_port}");
+
+    tokio::join!(run_server(addr.as_str()), run_client(&user,&peer_addr.as_str()));
 
     Ok(())
 }
