@@ -2,6 +2,7 @@ use std::time::SystemTime;
 use std::fmt::Display;
 use serde::{Serialize, Deserialize};
 
+#[derive(Clone)]
 pub struct User {
     id: u64,
     username: String,
